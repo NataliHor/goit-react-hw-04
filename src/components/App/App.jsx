@@ -15,7 +15,7 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
-  const [hasMore, setHasMore] = useState(true);
+  const [hasMore, setHasMore] = useState(false);
 
   useEffect(() => {
     if (query === "") {
@@ -26,12 +26,14 @@ export default function App() {
     async function getImages() {
       try {
         setLoading(true);
+        setHasMore(false);
         setError(false);
         const newImages = await imageApi(query, page);
 
         if (newImages.length === 0) {
           setHasMore(false);
         } else {
+          setHasMore(true);
           setImages((prevState) => [...prevState, ...newImages]);
         }
       } catch (error) {
@@ -48,7 +50,7 @@ export default function App() {
     setQuery(newQuery);
     setPage(1);
     setImages([]);
-    setHasMore(true);
+    setHasMore(false);
   };
 
   const handleLoadMore = () => {
